@@ -1,3 +1,4 @@
+// objeto literal
 const natalia = {
     name: "Natalia",
     age:20,
@@ -12,7 +13,7 @@ const natalia = {
 natalia.cursosAprobados.push("Curso de Resposive Desing")
 
 
-
+// Prototipos con funciones
 function Student(name, age, cursosAprobados) {
     this.name = name;
     this.age = age;
