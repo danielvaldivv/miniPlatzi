@@ -9,6 +9,7 @@ class Student {
         instagram = undefined,
         approvadesCourses = [],
         learningPaths = [],
+        platziRank = 0,
     }) {
         this.name = name;
         this.email = email;
@@ -19,6 +20,17 @@ class Student {
         };
         this.approvadesCourses = approvadesCourses;
         this.learningPaths = learningPaths;
+        this._platziRank = platziRank;
+    }
+    get platziRank(){
+        return this._platziRank();
+    }
+    set platziRank (newPlatziRank) {
+        if (typeof newPlatziRank === "number"){
+            this._platziRank = newPlatziRank;
+        } else {
+            console.error("No puedes realizar esta cambio");
+        }
     }
 };
 
@@ -27,8 +39,14 @@ class LearningPaths{
         nameLearningPath,
         courses = [],
     }) {
-        this.nameLearningPath = nameLearningPath;
-        this.courses = courses;
+        this._nameLearningPath = nameLearningPath;
+        this._courses = courses;
+    }
+    get nameLearningPath(){
+        return this._nameLearningPath();
+    }
+    get courses(){
+        return this._courses();
     }
 }
 
@@ -37,9 +55,14 @@ class Course {
         nameCourse,
         classes = [],
     ){
-        this.nameCourse = nameCourse;
+        this._nameCourse = nameCourse;
         this.classes = classes;
     }
+
+    get nameCourse(){
+        return this._nameCourse();
+    }
+    
 }
 
 const cursoCompBas = new Course({
@@ -293,10 +316,10 @@ const juan2 = new Student({
     twitter: "fjuandc",
     learningPaths: escuelaWeb,
 });
-juan2.approvadesCourses.push(escuelaWeb.courses[1])
-juan2.approvadesCourses.push(escuelaWeb.courses[3])
-juan2.approvadesCourses.push(escuelaWeb.courses[4])
-juan2.approvadesCourses.push(escuelaWeb.courses[7])
+juan2.approvadesCourses.push(escuelaWeb._courses[1])
+juan2.approvadesCourses.push(escuelaWeb._courses[3])
+juan2.approvadesCourses.push(escuelaWeb._courses[4])
+juan2.approvadesCourses.push(escuelaWeb._courses[7])
 
 const miguelito2 = new Student({
     name:"Miguelito",
@@ -305,6 +328,6 @@ const miguelito2 = new Student({
     twitter: "miguelito_feliz",
     learningPaths: escuelaDataScience,
 });
-miguelito2.approvadesCourses.push(escuelaDataScience.courses[0])
-miguelito2.approvadesCourses.push(escuelaDataScience.courses[1])
-miguelito2.approvadesCourses.push(escuelaDataScience.courses[3])
+miguelito2.approvadesCourses.push(escuelaDataScience._courses[0])
+miguelito2.approvadesCourses.push(escuelaDataScience._courses[1])
+miguelito2.approvadesCourses.push(escuelaDataScience._courses[3])
