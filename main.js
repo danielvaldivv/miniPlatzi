@@ -1,5 +1,22 @@
 //Programación Orientada a Objetos
 //Creación de Clases y de Instancias
+class Comment{
+    constructor({
+        content,
+        studentName,
+        studentRole = "estudiante",
+    }) {
+        this.content = content;
+        this.studentName = studentName;        
+        this.studentRole = studentRole;
+        this.likes = 0;
+    }
+    publicar() {
+        console.log(this.studentName + " (" + this.studentRole + ") ");
+        console.log(this.likes + "likes");
+        console.log(this.content);
+    }
+}
 class Student {
     constructor({
         name,
@@ -7,7 +24,7 @@ class Student {
         username,
         twitter = undefined,
         instagram = undefined,
-        approvadesCourses = [],
+        approvedCourses = [],
         learningPaths = [],
         platziRank = 0,
     }) {
@@ -18,10 +35,19 @@ class Student {
             twitter,
             instagram,
         };
-        this.approvadesCourses = approvadesCourses;
+        this.approvedCourses = approvedCourses;
         this.learningPaths = learningPaths;
         this._platziRank = platziRank;
     }
+
+    publicarComentario(commentContent) {
+        const comment = new Comment ({
+            content: commentContent,
+            studentName: this.name,
+        });
+        comment.publicar();
+    }
+
     get platziRank(){
         return this._platziRank();
     }
@@ -33,6 +59,60 @@ class Student {
         }
     }
 };
+class FreeStudent extends Student{
+    constructor(props) {
+        super(props);
+    }
+    approvedCourse(newCourse) {
+        if (newCourse.isFree){
+            this.approvedCourses.push(newCourse)
+        } else {
+            console.warn("Lo sentimos, " + this.name + ", solo puedes tomar cursos gratis.")
+        }
+    }
+};
+
+class BasicStudent extends Student{
+    constructor(props) {
+        super(props);
+    }
+
+    approvedCourse(newCourse) {
+        if (newCourse.lang !== "English"){
+            this.approvedCourses.push(newCourse);
+        } else {
+            console.warn("Lo sentimos, " + this.name + ", no puedes tomar cursos en inglés.");
+        }
+    }
+};
+class ExpertStudent extends Student{
+    constructor(props) {
+        super(props);
+    }
+
+    approvedCourse(newCourse) {        
+        this.approvedCourses.push(newCourse);
+    }
+};
+class TeacherStudent extends Student{
+    constructor(props) {
+        super(props);
+    }
+
+    approvedCourse(newCourse) {        
+        this.approvedCourses.push(newCourse);
+    }
+
+    publicarComentario(commentContent) {
+        const comment = new Comment ({
+            content: commentContent,
+            studentName: this.name,
+            studentRole: "profesor"
+        });
+        comment.publicar();
+    }
+};
+
 
 class LearningPaths{
     constructor({
@@ -48,22 +128,37 @@ class LearningPaths{
     get courses(){
         return this._courses();
     }
-}
+};
+
 
 class Course {
-    constructor(
+    constructor({
         nameCourse,
         classes = [],
-    ){
-        this._nameCourse = nameCourse;
+        isFree = false,
+        lang = "spanish",
+    }) {
+        this.nameCourse = nameCourse;
         this.classes = classes;
+        this.isFree = isFree;
+        this.lang = lang;
     }
 
-    get nameCourse(){
-        return this._nameCourse();
-    }
 }
-
+const cursFreeProgBas = new Course({
+    nameCourse: "Curso Gratis de Programación Básica",
+    classes: [
+        "Clase 1" + " Curso Gratis de Programación Básica",
+        "Clase 2" + " Curso Gratis de Programación Básica",
+        "Clase 3" + " Curso Gratis de Programación Básica",
+        "Clase 4" + " Curso Gratis de Programación Básica",
+        "Clase 5" + " Curso Gratis de Programación Básica",
+        "Clase 6" + " Curso Gratis de Programación Básica",
+        "Clase 7" + " Curso Gratis de Programación Básica",
+        "Clase 8" + " Curso Gratis de Programación Básica",
+    ],
+    isFree: true,
+});
 const cursoCompBas = new Course({
     nameCourse: "Curso de Computación Básica",
     classes: [
@@ -202,6 +297,7 @@ const cursPOO = new Course({
 });
 const cursPOOJS = new Course({
     nameCourse: "Curso Básico de Programación Orientada a Objetos con JavaScript",
+    lang: "English",
     classes: [
         "Clase 1" + " Curso Básico de Programación Orientada a Objetos con JavaScript",
         "Clase 2" + " Curso Básico de Programación Orientada a Objetos con JavaScript",
@@ -281,6 +377,7 @@ const escuelaWeb = new LearningPaths({
     nameLearningPath:"Escuela de Desarrollo Web",
     courses: [
         cursoCompBas,
+        cursFreeProgBas,
         cursBasAlgPenLog,
         cursFunIngSoftw,
         cursPreworkWind,
@@ -299,6 +396,7 @@ const escuelaDataScience = new LearningPaths({
     nameLearningPath:"Escuela de Data Science",
     courses: [
         cursAnNegCienDat,
+        cursFreeProgBas,
         cursBasPy,
         cursIntrTerm,
         cursProfGit,
@@ -308,25 +406,40 @@ const escuelaDataScience = new LearningPaths({
     ]
 });
 
-const juan2 = new Student({
+
+
+const diego = new FreeStudent({
+    name:"Diego Campillo",
+    username: "diego456",
+    email: "diegocamp4@platzi.com",
+})
+
+const juan = new BasicStudent({
     name:"JuanDC",
     username: "juandc",
     email: "juanito@juanito.com",
     twitter: "fjuandc",
     learningPaths: escuelaWeb,
 });
-juan2.approvadesCourses.push(escuelaWeb._courses[1])
-juan2.approvadesCourses.push(escuelaWeb._courses[3])
-juan2.approvadesCourses.push(escuelaWeb._courses[4])
-juan2.approvadesCourses.push(escuelaWeb._courses[7])
+juan.approvedCourses.push(escuelaWeb._courses[1])
+juan.approvedCourses.push(escuelaWeb._courses[3])
+juan.approvedCourses.push(escuelaWeb._courses[4])
+juan.approvedCourses.push(escuelaWeb._courses[7])
 
-const miguelito2 = new Student({
+const miguelito = new ExpertStudent({
     name:"Miguelito",
     username: "miguelitofeliz",
     email: "miguelito@platzi.com",
     twitter: "miguelito_feliz",
     learningPaths: escuelaDataScience,
 });
-miguelito2.approvadesCourses.push(escuelaDataScience._courses[0])
-miguelito2.approvadesCourses.push(escuelaDataScience._courses[1])
-miguelito2.approvadesCourses.push(escuelaDataScience._courses[3])
+miguelito.approvedCourses.push(escuelaDataScience._courses[0])
+miguelito.approvedCourses.push(escuelaDataScience._courses[1])
+miguelito.approvedCourses.push(escuelaDataScience._courses[3])
+
+const Freddy = new TeacherStudent({
+    name:"Freddy Vega",
+    username: "freddier",
+    email: "fredier@platzi.com",
+    twitter: "freddier",
+});
