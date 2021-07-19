@@ -62,7 +62,6 @@ class Course {
     get nameCourse(){
         return this._nameCourse();
     }
-    
 }
 
 const cursoCompBas = new Course({
